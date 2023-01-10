@@ -1,19 +1,35 @@
 from aiogram import Bot, Dispatcher
 from aiogram.types import Message
+from core.handlers.basic import get_start
 import asyncio
-token = "5891161770:AAECuOQNCO94nuO9vIDm0yaY9RTJNgMWhLk"
+import logging
+from core .settings import settings
 
 
-async def get_start(message: Message, bot: Bot):
-    await bot.send_message(message.from_user.id, f'Привіт {message.from_user.first_name}.Радий тебе бачити!')
-    await message.answer(f'Привіт {message.from_user.first_name}.Радий тебе бачити!')
-    await message.reply(f'Привіт {message.from_user.first_name}.Радий тебе бачити!')
+
+async def start_bot(bot: Bot):
+    await bot.send_message(settings.bots.admin_id, text='Бота запущено!')
+
+
+async def stop_bot(bot: Bot):
+     await bot.send_message(settings.bots.admin_id, text='Бота зупинено!')
+
 
 
 async def start():
-    bot = Bot(token=token)
+    logging.basicConfig(level=logging.INFO,
+                        format="%(asctime)s - [%(levelname)s] -  %(name)s - (%(filename)s).%(funcName)s(%(lineno)d) - %(message)s"
+                        )
+
+
+
+    bot = Bot(token=settings.bots.bot_token, parse_mode='HTML')
+
 
     dp = Dispatcher()
+    dp.startup.register(start_bot)
+    dp.shutdown.register(stop_bot)
+
     dp.message.register(get_start)
     try:
         await dp.start_polling(bot)
