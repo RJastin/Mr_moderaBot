@@ -26,3 +26,19 @@ async def get_hello(message: Message, bot: Bot):
     # json_str = json.dumps(message.dict(), default=str)
     # print(json_str)
 
+
+async def on_user_joined(message: Message, bot: Bot):
+    await message.delete()
+
+
+async def on_user_leave(message: Message, bot: Bot):
+    await message.delete()
+
+
+async def cmd_ban(message: Message, bot: Bot):
+    if not message.reply_to_message:
+        await message.reply("це має бути відповідь на повідомлення")
+        return
+    await bot.kick_chat_member(chat_id=message.chat.id, user_id=message.reply_to_message.from_user.id)
+    await message.delete()
+    await message.reply_to_message.reply("користувача покарано за мат!")

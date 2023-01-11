@@ -1,6 +1,8 @@
 from aiogram import Bot, Dispatcher
 from aiogram.types import Message, ContentType
-from core.handlers.basic import get_start, get_photo, get_hello
+from core.handlers.basic import get_start, get_photo, get_hello, on_user_joined, on_user_leave, cmd_ban
+from core.filters.mat import IsMat
+from core.handlers.getmat import get_mat
 import asyncio
 import logging
 from core.settings import settings
@@ -27,9 +29,13 @@ async def start():
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)
     # dp.message.register(get_photo, ContentTypesFilter(content_types=[ContentType.PHOTO]))
+    dp.message.register(get_mat, IsMat())
     dp.message.register(get_photo, F.photo)
     dp.message.register(get_hello, F.text == 'Привіт')
+    dp.message.register(on_user_joined, F.new_chat_members)
+    dp.message.register(on_user_leave, F.left_chat_member)
     dp.message.register(get_start, Command(commands=['start', 'run']))
+    dp.message.register(cmd_ban, Command(commands=['ban']))
     # dp.message.register(get_start, Command(commands=['start', 'run']))
     try:
         await dp.start_polling(bot)
