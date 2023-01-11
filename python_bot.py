@@ -3,7 +3,7 @@ import config
 import logging
 import asyncio
 import time
-from filters import IsAdminFilter
+from core.filters import IsAdminFilter
 from aiogram import Bot, Dispatcher, executor, types
 
 # Задаємо рівень логування
