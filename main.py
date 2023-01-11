@@ -28,7 +28,6 @@ async def start():
     dp = Dispatcher()
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)
-    # dp.message.register(get_photo, ContentTypesFilter(content_types=[ContentType.PHOTO]))
     dp.message.register(get_mat, IsMat())
     dp.message.register(get_photo, F.photo)
     dp.message.register(get_hello, F.text == 'Привіт')
@@ -36,7 +35,7 @@ async def start():
     dp.message.register(on_user_leave, F.left_chat_member)
     dp.message.register(get_start, Command(commands=['start', 'run']))
     dp.message.register(cmd_ban, Command(commands=['ban']))
-    # dp.message.register(get_start, Command(commands=['start', 'run']))
+
     try:
         await dp.start_polling(bot)
     finally:
