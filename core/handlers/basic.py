@@ -2,13 +2,22 @@ from aiogram import Bot
 from aiogram.types import Message
 import logging
 import time
-import json
+# import json
+from core.keyboards.inline import get_inline_keyboard
+from core.utils.dbconnect import Request
 
 
-async def get_start(message: Message, bot: Bot):
+async def get_inline(message: Message, bot: Bot):
+    await message.answer(f'Привіт, {message.from_user.first_name}. Шукай допомогу натиснувши кнопки!',
+                         reply_markup=get_inline_keyboard())
+
+
+async def get_start(message: Message, bot: Bot, request: Request):
+    await request.add_data(message.from_user.id, message.from_user.first_name)
     # await bot.send_message(message.from_user.id, f'<b>Привіт {message.from_user.first_name}</b>')
     # await message.answer(f'<s>Привіт {message.from_user.first_name}</s>')
-    await message.reply(f'<tg-spoiler>Привіт {message.from_user.first_name}</tg-spoiler>')
+    # await message.reply(f'<tg-spoiler>Привіт {message.from_user.first_name}</tg-spoiler>')
+    await message.reply(f'<b>Привіт {message.from_user.first_name}</b>')
 
 
 async def get_photo(message: Message, bot: Bot):
